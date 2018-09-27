@@ -1,1 +1,1 @@
-UPX (http://upx.sourceforge.net/) is under the GPL as well.
+UPX (https://upx.github.io/) is licensed under the GPL as well.

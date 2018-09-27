@@ -1,6 +1,6 @@
 // CommitMonitor - simple checker for new commits in svn repositories
 
-// Copyright (C) 2007-2010, 2012-2014 - Stefan Kueng
+// Copyright (C) 2007-2010, 2012-2014, 2017 - Stefan Kueng
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -158,7 +158,7 @@ std::wstring CAppUtils::GetDataDir()
     bool bPortable = false;
 
     std::wstring appname = CAppUtils::GetAppName();
-    std::transform(appname.begin(), appname.end(), appname.begin(), std::tolower);
+    std::transform(appname.begin(), appname.end(), appname.begin(), ::towlower);
     if ((appname.find(_T("portable")) != std::wstring::npos) ||
         (appname.find(_T("local")) != std::wstring::npos))
         bPortable = true;

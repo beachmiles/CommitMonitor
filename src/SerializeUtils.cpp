@@ -1,6 +1,6 @@
 // CommitMonitor - simple checker for new commits in svn repositories
 
-// Copyright (C) 2007, 2012-2014 - Stefan Kueng
+// Copyright (C) 2007, 2012-2014, 2016 - Stefan Kueng
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -121,7 +121,7 @@ bool CSerializeUtils::LoadString(FILE * hFile, std::string &str)
             int length = 0;
             if (fread(&length, sizeof(length), 1, hFile))
             {
-                if (length)
+                if (length > 0)
                 {
                     if (length < SERIALIZEBUFFERSIZE)
                     {

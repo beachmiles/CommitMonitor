@@ -1,6 +1,6 @@
 // CommitMonitor - simple checker for new commits in svn repositories
 
-// Copyright (C) 2007-2015 - Stefan Kueng
+// Copyright (C) 2007-2016 - Stefan Kueng
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -709,7 +709,7 @@ void SVN::progress_func(apr_off_t progress, apr_off_t total, void *baton, apr_po
         pSVN->m_SVNProgressMSG.BytesPerSecond = average;
         if (average < 1024)
         {
-            _stprintf_s(formatbuf, _countof(formatbuf), _T("%ld Bytes/s"), (int)average);
+            _stprintf_s(formatbuf, _countof(formatbuf), _T("%d Bytes/s"), (int)average);
             pSVN->m_SVNProgressMSG.SpeedString = formatbuf;
         }
         else

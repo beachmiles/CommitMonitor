@@ -1,6 +1,6 @@
 // CommitMonitor - simple checker for new commits in svn repositories
 
-// Copyright (C) 2007-2015 - Stefan Kueng
+// Copyright (C) 2007-2017 - Stefan Kueng
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -51,6 +51,8 @@ const int checkboxheight = CDPIAware::Instance().ScaleY(CHECKBOXHEIGHT);
 const std::wstring g_nodate(L"(no date)");
 const std::wstring g_noauthor(L"(no author)");
 const std::wstring g_noalias(L"");
+
+std::wstring			svnFileList;  //save a list of all changed files
 
 #ifndef _WIN32_WINNT_WIN10
 #define _WIN32_WINNT_WIN10 0x0A00
@@ -1899,7 +1901,7 @@ void CMainDlg::TreeItemSelected(HWND hTreeControl, HTREEITEM hSelectedItem)
             filterstring = filterstring.substr(1);
         }
         std::wstring filterstringlower = filterstring;
-        std::transform(filterstringlower.begin(), filterstringlower.end(), filterstringlower.begin(), ::tolower);
+        std::transform(filterstringlower.begin(), filterstringlower.end(), filterstringlower.begin(), ::towlower);
 
         bool bShowIgnored = !!SendDlgItemMessage(*this, IDC_SHOWIGNORED, BM_GETCHECK, 0, NULL);
         bool useFilter = !filterstringlower.empty();
@@ -1969,7 +1971,7 @@ void CMainDlg::TreeItemSelected(HWND hTreeControl, HTREEITEM hSelectedItem)
                     for (const auto& sSearch : filters)
                     {
                         std::wstring s = it->second.author.empty() ? g_noauthor : it->second.author;
-                        std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+                        std::transform(s.begin(), s.end(), s.begin(), ::towlower);
                         addEntry = s.find(sSearch) != std::wstring::npos;
 
                         if (!addEntry)
@@ -1978,13 +1980,13 @@ void CMainDlg::TreeItemSelected(HWND hTreeControl, HTREEITEM hSelectedItem)
                             if (aliasresult != m_aliases.end())
                             {
                                 s = aliasresult->second;
-                                std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+                                std::transform(s.begin(), s.end(), s.begin(), ::towlower);
                                 addEntry = s.find(sSearch) != std::wstring::npos;
                             }
                             if (!addEntry)
                             {
                                 s = it->second.message;
-                                std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+                                std::transform(s.begin(), s.end(), s.begin(), ::towlower);
                                 addEntry = s.find(sSearch) != std::wstring::npos;
                                 if (!addEntry)
                                 {
@@ -1996,7 +1998,7 @@ void CMainDlg::TreeItemSelected(HWND hTreeControl, HTREEITEM hSelectedItem)
                                         for (const auto& cpit : it->second.m_changedPaths)
                                         {
                                             s = cpit.first;
-                                            std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+                                            std::transform(s.begin(), s.end(), s.begin(), ::towlower);
                                             addEntry = s.find(sSearch) != std::wstring::npos;
                                             if (addEntry)
                                                 break;
@@ -2016,12 +2018,12 @@ void CMainDlg::TreeItemSelected(HWND hTreeControl, HTREEITEM hSelectedItem)
             if ((!bShowIgnored)&&(addEntry))
             {
                 std::wstring author1 = it->second.author.empty() ? g_noauthor : it->second.author;
-                std::transform(author1.begin(), author1.end(), author1.begin(), ::tolower);
+                std::transform(author1.begin(), author1.end(), author1.begin(), ::towlower);
 
                 if (!info->includeUsers.empty())
                 {
                     std::wstring s1 = info->includeUsers;
-                    std::transform(s1.begin(), s1.end(), s1.begin(), ::tolower);
+                    std::transform(s1.begin(), s1.end(), s1.begin(), ::towlower);
                     CAppUtils::SearchReplace(s1, _T("\r\n"), _T("\n"));
 
                     std::vector<std::wstring> includeVector = CAppUtils::tokenize_str(s1, _T("\n"));
@@ -2040,7 +2042,7 @@ void CMainDlg::TreeItemSelected(HWND hTreeControl, HTREEITEM hSelectedItem)
                 if (addEntry)
                 {
                     std::wstring s1 = info->ignoreUsers;
-                    std::transform(s1.begin(), s1.end(), s1.begin(), ::tolower);
+                    std::transform(s1.begin(), s1.end(), s1.begin(), ::towlower);
                     CAppUtils::SearchReplace(s1, _T("\r\n"), _T("\n"));
                     std::vector<std::wstring> ignoreVector = CAppUtils::tokenize_str(s1, _T("\n"));
                     for (auto ignoreIt = ignoreVector.begin(); ignoreIt != ignoreVector.end(); ++ignoreIt)
@@ -2339,6 +2341,8 @@ void CMainDlg::OnSelectListItem(LPNMLISTVIEW lpNMListView)
             }
             msg += pLogEntry->message.c_str();
             msg += _T("\n\n-------------------------------\n");
+		
+
             // now add all changed paths, one path per line
             for (auto it = pLogEntry->m_changedPaths.cbegin(); it != pLogEntry->m_changedPaths.cend(); ++it)
             {
@@ -2371,6 +2375,7 @@ void CMainDlg::OnSelectListItem(LPNMLISTVIEW lpNMListView)
 
                 msg += _T(" : ");
                 msg += it->first;
+
                 if (!it->second.copyfrom_path.empty())
                 {
                     msg += _T("  (copied from: ");
@@ -3092,7 +3097,7 @@ void CMainDlg::OnContextMenu(WPARAM wParam, LPARAM lParam)
             mii.fMask = MIIM_TYPE;
             mii.fType = MFT_STRING;
             WCHAR menutext[200] = {0};
-            swprintf_s(menutext, L"Fetch ne&xt %d log messages", (DWORD)CRegStdDWORD(_T("Software\\CommitMonitor\\NumLogs"), 30));
+            swprintf_s(menutext, L"Fetch ne&xt %lu log messages", (DWORD)CRegStdDWORD(_T("Software\\CommitMonitor\\NumLogs"), 30));
             mii.dwTypeData = menutext;
             SetMenuItemInfo(hMenu, ID_POPUP_FETCHNEXT, MF_BYCOMMAND, &mii);
 

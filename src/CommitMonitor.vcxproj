@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -28,23 +28,23 @@
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -93,7 +93,7 @@
       <AdditionalIncludeDirectories>..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Ws2_32.lib;Mswsock.lib;Rpcrt4.lib;Imm32.lib;Secur32.lib;Crypt32.lib;Psapi.lib;libapr.lib;libaprutil.lib; libsvn_client.lib;libsvn_delta.lib;libsvn_diff.lib;libsvn_ra.lib;libsvn_ra_serf.lib;libsvn_ra_svn.lib;libsvn_repos.lib;libsvn_subr.lib;libsvn_wc.lib;libsasls.lib;libserf.lib;sqlite.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Msimg32.lib;Ws2_32.lib;Mswsock.lib;Rpcrt4.lib;Imm32.lib;Secur32.lib;Crypt32.lib;Psapi.lib;libapr.lib;libaprutil.lib;libsvn_client.lib;libsvn_delta.lib;libsvn_diff.lib;libsvn_ra.lib;libsvn_ra_serf.lib;libsvn_ra_svn.lib;libsvn_repos.lib;libsvn_subr.lib;libsvn_wc.lib;libsasls.lib;libserf.lib;sqlite.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\ext\apr\$(Configuration)_$(Platform);..\ext\apr-util\$(Configuration)_$(Platform); ..\ext\Subversion\$(Configuration)_$(Platform);..\ext\cyrus-sasl\$(Configuration)_$(Platform);..\ext\serf\$(Configuration)_$(Platform);..\ext\sqlite\$(Configuration)_$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -102,6 +102,9 @@
     <Manifest>
       <EnableDpiAwareness>true</EnableDpiAwareness>
     </Manifest>
+    <PostBuildEvent>
+      <Command>xcopy /y /d  "$(ProjectDir)*.pl" "$(ProjectDir)$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -119,7 +122,7 @@
       <PreprocessorDefinitions>_WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Ws2_32.lib;Mswsock.lib;Rpcrt4.lib;Imm32.lib;Secur32.lib;Crypt32.lib;Psapi.lib;libapr.lib;libaprutil.lib; libsvn_client.lib;libsvn_delta.lib;libsvn_diff.lib;libsvn_ra.lib;libsvn_ra_serf.lib;libsvn_ra_svn.lib;libsvn_repos.lib;libsvn_subr.lib;libsvn_wc.lib;libsasls.lib;libserf.lib;sqlite.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Msimg32.lib;Ws2_32.lib;Mswsock.lib;Rpcrt4.lib;Imm32.lib;Secur32.lib;Crypt32.lib;Psapi.lib;libapr.lib;libaprutil.lib;libsvn_client.lib;libsvn_delta.lib;libsvn_diff.lib;libsvn_ra.lib;libsvn_ra_serf.lib;libsvn_ra_svn.lib;libsvn_repos.lib;libsvn_subr.lib;libsvn_wc.lib;libsasls.lib;libserf.lib;sqlite.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\ext\apr\$(Configuration)_$(Platform);..\ext\apr-util\$(Configuration)_$(Platform); ..\ext\Subversion\$(Configuration)_$(Platform);..\ext\cyrus-sasl\$(Configuration)_$(Platform);..\ext\serf\$(Configuration)_$(Platform);..\ext\sqlite\$(Configuration)_$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -145,7 +148,7 @@
       <AdditionalIncludeDirectories>..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Ws2_32.lib;Mswsock.lib;Rpcrt4.lib;Imm32.lib;Secur32.lib;Crypt32.lib;Psapi.lib;libapr.lib;libaprutil.lib; libsvn_client.lib;libsvn_delta.lib;libsvn_diff.lib;libsvn_ra.lib;libsvn_ra_serf.lib;libsvn_ra_svn.lib;libsvn_repos.lib;libsvn_subr.lib;libsvn_wc.lib;libsasls.lib;libserf.lib;sqlite.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Msimg32.lib;Ws2_32.lib;Mswsock.lib;Rpcrt4.lib;Imm32.lib;Secur32.lib;Crypt32.lib;Psapi.lib;libapr.lib;libaprutil.lib;libsvn_client.lib;libsvn_delta.lib;libsvn_diff.lib;libsvn_ra.lib;libsvn_ra_serf.lib;libsvn_ra_svn.lib;libsvn_repos.lib;libsvn_subr.lib;libsvn_wc.lib;libsasls.lib;libserf.lib;sqlite.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\ext\apr\$(Configuration)_$(Platform);..\ext\apr-util\$(Configuration)_$(Platform); ..\ext\Subversion\$(Configuration)_$(Platform);..\ext\cyrus-sasl\$(Configuration)_$(Platform);..\ext\serf\$(Configuration)_$(Platform);..\ext\sqlite\$(Configuration)_$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -157,6 +160,9 @@
     <Manifest>
       <EnableDpiAwareness>true</EnableDpiAwareness>
     </Manifest>
+    <PostBuildEvent>
+      <Command>xcopy /y /d  "$(ProjectDir)*.pl" "$(ProjectDir)$(OutDir)"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -174,7 +180,7 @@
       <PreprocessorDefinitions>_WIN64;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Ws2_32.lib;Mswsock.lib;Rpcrt4.lib;Imm32.lib;Secur32.lib;Crypt32.lib;Psapi.lib;libapr.lib;libaprutil.lib; libsvn_client.lib;libsvn_delta.lib;libsvn_diff.lib;libsvn_ra.lib;libsvn_ra_serf.lib;libsvn_ra_svn.lib;libsvn_repos.lib;libsvn_subr.lib;libsvn_wc.lib;libsasls.lib;libserf.lib;sqlite.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Msimg32.lib;Ws2_32.lib;Mswsock.lib;Rpcrt4.lib;Imm32.lib;Secur32.lib;Crypt32.lib;Psapi.lib;libapr.lib;libaprutil.lib;libsvn_client.lib;libsvn_delta.lib;libsvn_diff.lib;libsvn_ra.lib;libsvn_ra_serf.lib;libsvn_ra_svn.lib;libsvn_repos.lib;libsvn_subr.lib;libsvn_wc.lib;libsasls.lib;libserf.lib;sqlite.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\ext\apr\$(Configuration)_$(Platform);..\ext\apr-util\$(Configuration)_$(Platform); ..\ext\Subversion\$(Configuration)_$(Platform);..\ext\cyrus-sasl\$(Configuration)_$(Platform);..\ext\serf\$(Configuration)_$(Platform);..\ext\sqlite\$(Configuration)_$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -321,6 +327,7 @@
     <None Include="Setup\Setup.wxs" />
     <None Include="Setup\Setup64.wxs" />
     <None Include="Setup\VersionNumberInclude.in.wxi" />
+    <None Include="svn.pl" />
     <None Include="who-is-who.example" />
   </ItemGroup>
   <ItemGroup>

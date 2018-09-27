@@ -1,6 +1,6 @@
 // CommitMonitor - simple checker for new commits in svn repositories
 
-// Copyright (C) 2007-2015 - Stefan Kueng
+// Copyright (C) 2007-2016 - Stefan Kueng
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -116,6 +116,11 @@ bool CUrlInfo::Save(FILE * hFile)
         return false;
     if (!CSerializeUtils::SaveString(hFile, accurevRepo))
         return false;
+
+    // Version 16
+    if (!CSerializeUtils::SaveNumber(hFile, useDefaultAuth))
+        return false;
+
 
     // prevent caching more than URLINFO_MAXENTRIES revisions - this is a commit monitor, not a full featured
     // log dialog!
@@ -291,6 +296,13 @@ bool CUrlInfo::Load(const unsigned char *& buf)
     {
         sccs = SCCS_SVN;
     }
+    if (version >= 16)
+    {
+        if (!CSerializeUtils::LoadNumber(buf, value))
+            return false;
+        useDefaultAuth = !!value;
+    }
+
 
 
     logentries.clear();
@@ -554,7 +566,7 @@ bool CUrlInfos::Export(LPCWSTR filename, LPCWSTR password)
         iniFile.SetValue(it->first.c_str(), L"minutesinterval", numberBuf);
         swprintf_s(numberBuf, _countof(numberBuf), L"%ld", it->second.minminutesinterval);
         iniFile.SetValue(it->first.c_str(), L"minminutesinterval", numberBuf);
-        swprintf_s(numberBuf, _countof(numberBuf), L"%ld", (int)it->second.disallowdiffs);
+        swprintf_s(numberBuf, _countof(numberBuf), L"%d", (int)it->second.disallowdiffs);
         iniFile.SetValue(it->first.c_str(), L"disallowdiffs", numberBuf);
         swprintf_s(numberBuf, _countof(numberBuf), L"%ld", it->second.maxentries);
         iniFile.SetValue(it->first.c_str(), L"maxentries", numberBuf);
@@ -665,6 +677,7 @@ bool CUrlInfos::Import(LPCWSTR filename, LPCWSTR password)
             existingUrlInfo.maxentries = info.maxentries;
             existingUrlInfo.noexecuteignored = info.noexecuteignored;
             existingUrlInfo.monitored = info.monitored;
+            existingUrlInfo.useDefaultAuth = info.useDefaultAuth;
 
             infos[existingUrlInfo.url] = existingUrlInfo;
         }
@@ -694,7 +707,7 @@ void CUrlInfos::UpdateAuth()
             it->second.username = CStringUtils::Decrypt(std::wstring(defaultUsername).c_str()).get();
             it->second.password = CStringUtils::Decrypt(std::wstring(defaultPassword).c_str()).get();
         }
-        it++;
+        ++it;
     }
 
     guard.ReleaseWriterLock();

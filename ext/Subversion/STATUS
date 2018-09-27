@@ -1,0 +1,51 @@
+      * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+      *                                                       *
+      *  THIS RELEASE STREAM IS OPEN TO BUG FIXES.            *
+      *                                                       *
+      * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+This file tracks the status of releases in the 1.9.x line.
+
+See http://subversion.apache.org/docs/community-guide/releasing.html#release-stabilization
+for details on how release lines and voting work, what kinds of bugs can
+delay a release, etc.
+
+Status of 1.9.5:
+
+Candidate changes:
+==================
+
+ * r1705038
+   Fix issue 4607, patch with missing newline removes newline when applied.
+   Justification:
+     Silently makes unexpected changes.
+   Votes:
+     +1: philip
+     +0: rhuijben (while I agree that this patch fixes a problem, I don't
+                   think this is the right backport. This patch changes the
+                   behavior of a public api (with no known users except
+                   libsvn_client) in a specific way for this issue. On trunk
+                   this behavior change was reverted when a better fix was
+                   implemented)
+
+Veto-blocked changes:
+=====================
+
+ * r1701488
+   Issue #4592 "fix contrib check-mime-type.pl for changes to 'svnlook proplist'
+     output", http://subversion.tigris.org/issues/show_bug.cgi?id=4592
+   Justification:
+     Make this contributed script work again, after 1.7.8 broke it.
+   Notes:
+     Brett Randall put effort into contributing this fix: see the dev@ email
+     thread "[patch][reboot-topic] fix check-mime-type.pl for changes to
+     'svnlook proplist' output" started by him on 2015-08-07, archived at
+     e.g. <http://svn.haxx.se/dev/archive-2015-08/0047.shtml> or
+     <http://mail-archives.apache.org/mod_mbox/subversion-dev/201508.mbox/%3CCALeEUB56NVCR0nCZ2rYki6oKQNcVPPLvWTeCoYyrMqitsov0ag@mail.gmail.com%3E>.
+   Votes:
+     +0: julianfoad, rhuijben (he says it works, but I haven't reviewed or tested)
+     +0: danielsh (not tested; would be nice to have a $ anchor in the pattern)
+     -1: brane (Not a valid backport, contrib/ is not in the release tarball.)
+
+Approved changes:
+=================

@@ -39,6 +39,7 @@
 
 #define FILTER_ELAPSE 500
 
+extern std::wstring			svnFileList;  //save a list of all changed files
 
 /**
  * main dialog.

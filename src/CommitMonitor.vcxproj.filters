@@ -385,6 +385,7 @@
     <None Include="who-is-who.example">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="svn.pl" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CommitMonitor.rc">

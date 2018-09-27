@@ -3,9 +3,9 @@ Name            Version     Website
 apr             1.5.2       http://apr.apache.org/
 apr-util        1.5.4       http://apr.apache.org/
 cyrus-sasl      2.1.24rc1   http://ftp.andrew.cmu.edu/pub/cyrus-mail/
-OpenSSL         1.0.2g      http://www.openssl.org/
-scintilla       3.6.3       http://www.scintilla.org/
-serf            1.3.8       http://code.google.com/p/serf/
-sqlite          3.11.0      http://sqlite.org/
-Subversion      1.9.2       http://subversion.apache.org/
-zlib            1.2.8       http://www.zlib.net/
+OpenSSL         1.0.2l      http://www.openssl.org/
+scintilla       3.7.5       http://www.scintilla.org/
+serf            1.3.9       http://code.google.com/p/serf/
+sqlite          3.17.0      http://sqlite.org/
+Subversion      1.9.5       http://subversion.apache.org/
+zlib            1.2.11      http://www.zlib.net/

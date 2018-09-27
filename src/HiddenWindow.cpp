@@ -1,6 +1,6 @@
 // CommitMonitor - simple checker for new commits in svn repositories
 
-// Copyright (C) 2007-2015 - Stefan Kueng
+// Copyright (C) 2007-2017 - Stefan Kueng
 
 // This program is free software; you can redistribute it and/or
 // modify it under the terms of the GNU General Public License
@@ -39,6 +39,7 @@
 #include <cctype>
 #include <regex>
 #include <set>
+
 
 // for Vista
 #define MSGFLT_ADD 1
@@ -818,12 +819,12 @@ DWORD CHiddenWindow::RunThread()
                             if (!bEntryExists)
                             {
                                 std::wstring author1 = logit->second.author;
-                                std::transform(author1.begin(), author1.end(), author1.begin(), ::tolower);
+                                std::transform(author1.begin(), author1.end(), author1.begin(), ::towlower);
                                 authors.insert(author1);
                                 if (!writeIt->second.includeUsers.empty())
                                 {
                                     std::wstring s1 = writeIt->second.includeUsers;
-                                    std::transform(s1.begin(), s1.end(), s1.begin(), ::tolower);
+                                    std::transform(s1.begin(), s1.end(), s1.begin(), ::towlower);
                                     CAppUtils::SearchReplace(s1, _T("\r\n"), _T("\n"));
                                     std::vector<std::wstring> includeVector = CAppUtils::tokenize_str(s1, _T("\n"));
                                     bool bInclude = false;
@@ -841,7 +842,7 @@ DWORD CHiddenWindow::RunThread()
                                 if (!writeIt->second.ignoreUsers.empty())
                                 {
                                     std::wstring s1 = writeIt->second.ignoreUsers;
-                                    std::transform(s1.begin(), s1.end(), s1.begin(), ::tolower);
+                                    std::transform(s1.begin(), s1.end(), s1.begin(), ::towlower);
                                     CAppUtils::SearchReplace(s1, _T("\r\n"), _T("\n"));
                                     std::vector<std::wstring> ignoreVector = CAppUtils::tokenize_str(s1, _T("\n"));
                                     for (auto ignoreIt = ignoreVector.begin(); ignoreIt != ignoreVector.end(); ++ignoreIt)
@@ -1116,9 +1117,47 @@ DWORD CHiddenWindow::RunThread()
                         }
                         CAppUtils::SearchReplace(commandline, tag, a);
 
+
+						//get current dir
+						TCHAR localPath[MAX_PATH+1];
+						GetCurrentDirectory(sizeof(localPath), localPath);
+
+						// replace "%path" with the current path
+						tag = _T("%programpath");
+						CAppUtils::SearchReplace(commandline, tag, localPath);
+
+
+						long revValLong = std::stol(srev);
+
+						tag = _T("%message");
+						CAppUtils::SearchReplace(commandline, tag, pSCCS->m_logs[revValLong].message);
+
+						//get cheanged file list
+						//OnSelectListItem((LPNMLISTVIEW)lParam);
+						//pSCCS->m_logs[2053].m_changedPaths
+
+						//    std::map<svn_revnum_t,SCCSLogEntry> m_logs; ///< contains the gathered log information
+						// std::map<std::wstring, SCCSLogChangedPaths>   m_changedPaths;  //.copyfrom_path
+						//foreach (std::wstring myRec in pSCCS->m_logs[revValLong].m_changedPaths)
+
+
+						for (std::map<std::wstring, SCCSLogChangedPaths>::iterator pathRec = pSCCS->m_logs[revValLong].m_changedPaths.begin(); pathRec != pSCCS->m_logs[revValLong].m_changedPaths.end(); ++pathRec)
+						{
+							svnFileList += pathRec->first.c_str();
+							svnFileList += _T("\n");
+						}
+
+						// replace "%url" with the repository url
+						tag = _T("%filelist");
+						CAppUtils::SearchReplace(commandline, tag, svnFileList);
+
+
                         CAppUtils::LaunchApplication(commandline);
+						svnFileList.clear();
                     }
                 }
+
+				
 
             }
             else if (headrev > 0)
@@ -1187,7 +1226,7 @@ DWORD CHiddenWindow::RunThread()
                 // check whether the url points to an SVNParentPath: it points
                 // to a repository, but we got an error for some reason when
                 // trying to find the HEAD revision
-                if (pSCCS->Err && it->second.logentries.empty() &&(it->second.lastcheckedrev == 0)&&((pSCCS->Err->apr_err == SVN_ERR_RA_DAV_RELOCATED)||(pSCCS->Err->apr_err == SVN_ERR_RA_DAV_REQUEST_FAILED)||(pSCCS->Err->apr_err == SVN_ERR_RA_DAV_MALFORMED_DATA)))
+                if (pSCCS->Err && it->second.logentries.empty() &&(it->second.lastcheckedrev == 0)&&((pSCCS->Err->apr_err == SVN_ERR_RA_DAV_RELOCATED)||(pSCCS->Err->apr_err == SVN_ERR_RA_DAV_REQUEST_FAILED)||(pSCCS->Err->apr_err == SVN_ERR_RA_DAV_MALFORMED_DATA) || (pSCCS->Err->apr_err == SVN_ERR_RA_CANNOT_CREATE_SESSION)))
                 {
                     // if we can't fetch the HEAD revision, it might be because the URL points to an SVNParentPath
                     // instead of pointing to an actual repository.

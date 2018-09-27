@@ -1,6 +1,6 @@
 Index: engines/e_capi.c
 ===================================================================
---- engines/e_capi.c	(revision 1112)
+--- engines/e_capi.c	(revision 1134)
 +++ engines/e_capi.c	(working copy)
 @@ -72,9 +72,11 @@
  #  include <windows.h>
@@ -49,7 +49,7 @@ Index: engines/e_capi.c
  }
  # endif
  
-@@ -1771,7 +1794,9 @@
+@@ -1784,7 +1807,9 @@
  
  static int cert_select_simple(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs)
  {
